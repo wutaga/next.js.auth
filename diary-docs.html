@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Дневник — Документация</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: #F7F8FC;
+    color: #1a1a2e;
+    font-size: 14px;
+    line-height: 1.7;
+  }
+
+  .cover {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    color: white;
+    min-height: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 60px 40px;
+    text-align: center;
+  }
+
+  .cover .emoji { font-size: 64px; margin-bottom: 20px; }
+  .cover h1 {
+    font-size: 42px;
+    font-weight: 700;
+    background: linear-gradient(135deg, #a78bfa, #f472b6);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 10px;
+  }
+  .cover .subtitle { color: rgba(255,255,255,0.6); font-size: 16px; margin-bottom: 8px; }
+  .cover .meta { color: rgba(255,255,255,0.35); font-size: 13px; }
+
+  .container { max-width: 960px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .toc {
+    background: white;
+    border-radius: 16px;
+    padding: 28px 32px;
+    margin-bottom: 40px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+    border-left: 4px solid #7c3aed;
+  }
+  .toc h2 { font-size: 16px; font-weight: 700; color: #7c3aed; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.05em; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: #4f46e5; text-decoration: none; font-weight: 500; }
+  .toc a:hover { text-decoration: underline; }
+
+  .section {
+    background: white;
+    border-radius: 16px;
+    padding: 32px;
+    margin-bottom: 28px;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.06);
+  }
+
+  h2.section-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #ede9fe;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h2.section-title .num {
+    background: linear-gradient(135deg, #7c3aed, #ec4899);
+    color: white;
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; flex-shrink: 0;
+  }
+
+  h3 { font-size: 16px; font-weight: 600; color: #4f46e5; margin: 20px 0 12px; }
+
+  p { color: #4a4a6a; margin-bottom: 12px; }
+
+  .badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .badge-server { background: #ede9fe; color: #7c3aed; }
+  .badge-client { background: #fce7f3; color: #be185d; }
+
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 13px; }
+  th {
+    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    color: white;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  th:first-child { border-radius: 8px 0 0 0; }
+  th:last-child { border-radius: 0 8px 0 0; }
+  td { padding: 10px 14px; border-bottom: 1px solid #f0f0f8; color: #4a4a6a; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: #fafafa; }
+  tr:hover td { background: #f5f3ff; }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    background: #f1f0fe;
+    color: #7c3aed;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
+
+  .code-block {
+    background: #1e1e2e;
+    border-radius: 12px;
+    padding: 20px 24px;
+    margin: 16px 0;
+    overflow-x: auto;
+  }
+  .code-block pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.8;
+    color: #cdd6f4;
+    white-space: pre;
+  }
+  .code-block .comment { color: #6c7086; }
+  .code-block .path { color: #89b4fa; }
+  .code-block .file { color: #a6e3a1; }
+  .code-block .arrow { color: #f38ba8; }
+
+  .method {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  .method-get { background: #dcfce7; color: #166534; }
+  .method-post { background: #dbeafe; color: #1d4ed8; }
+  .method-put { background: #fef3c7; color: #92400e; }
+  .method-delete { background: #fee2e2; color: #991b1b; }
+
+  .auth-yes { color: #166534; font-weight: 600; }
+  .auth-no { color: #92400e; font-weight: 600; }
+
+  ul { padding-left: 20px; margin-bottom: 12px; }
+  li { color: #4a4a6a; margin-bottom: 6px; }
+
+  .tech-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .tech-card {
+    background: #f5f3ff;
+    border: 1px solid #ede9fe;
+    border-radius: 12px;
+    padding: 14px 16px;
+  }
+  .tech-card .tech-name { font-weight: 700; color: #4f46e5; font-size: 14px; margin-bottom: 4px; }
+  .tech-card .tech-desc { color: #6b7280; font-size: 12px; }
+
+  .flow-steps { display: flex; flex-direction: column; gap: 10px; margin: 16px 0; }
+  .flow-step {
+    display: flex; align-items: flex-start; gap: 14px;
+    background: #fafafa; border-radius: 10px; padding: 12px 16px;
+    border-left: 3px solid #7c3aed;
+  }
+  .flow-step .step-num {
+    background: #7c3aed; color: white;
+    width: 24px; height: 24px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+  .flow-step .step-text { color: #4a4a6a; font-size: 13px; }
+
+  .env-table td:first-child { font-family: 'JetBrains Mono', monospace; color: #7c3aed; font-size: 12px; }
+
+  .roadmap-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0; border-bottom: 1px solid #f0f0f8;
+  }
+  .roadmap-item:last-child { border-bottom: none; }
+  .dot-done { width: 10px; height: 10px; border-radius: 50%; background: #22c55e; flex-shrink: 0; }
+  .dot-todo { width: 10px; height: 10px; border-radius: 50%; background: #e5e7eb; border: 2px solid #d1d5db; flex-shrink: 0; }
+
+  .footer {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 12px;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  @media print {
+    body { background: white; }
+    .section { box-shadow: none; border: 1px solid #e5e7eb; }
+    .cover { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div class="emoji">📔</div>
+  <h1>Дневник</h1>
+  <div class="subtitle">Техническая документация проекта</div>
+  <div class="meta">Версия 1.0 &nbsp;•&nbsp; Февраль 2026</div>
+</div>
+
+<div class="container">
+
+  <!-- Оглавление -->
+  <div class="toc">
+    <h2>Содержание</h2>
+    <ol>
+      <li><a href="#overview">Обзор проекта</a></li>
+      <li><a href="#stack">Технический стек</a></li>
+      <li><a href="#structure">Структура проекта</a></li>
+      <li><a href="#database">База данных</a></li>
+      <li><a href="#api">API роуты</a></li>
+      <li><a href="#auth">Система авторизации</a></li>
+      <li><a href="#pages">Страницы приложения</a></li>
+      <li><a href="#setup">Запуск проекта</a></li>
+      <li><a href="#env">Переменные окружения</a></li>
+      <li><a href="#roadmap">Планы развития</a></li>
+    </ol>
+  </div>
+
+  <!-- 1. Обзор -->
+  <div class="section" id="overview">
+    <h2 class="section-title"><span class="num">1</span> Обзор проекта</h2>
+    <p><strong>Дневник</strong> — веб-приложение для ведения личных записей с системой авторизации и управления профилем. Приложение позволяет пользователям регистрироваться, входить в систему, создавать, редактировать и удалять записи с возможностью отслеживания настроения.</p>
+    <p>Проект создан в образовательных целях и демонстрирует полный стек современной веб-разработки: от базы данных до клиентского интерфейса.</p>
+  </div>
+
+  <!-- 2. Стек -->
+  <div class="section" id="stack">
+    <h2 class="section-title"><span class="num">2</span> Технический стек</h2>
+    <div class="tech-grid">
+      <div class="tech-card">
+        <div class="tech-name">Next.js 16</div>
+        <div class="tech-desc">Основной фреймворк. App Router, SSR, Server Components</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">TypeScript</div>
+        <div class="tech-desc">Строгая типизация кода</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">PostgreSQL 16</div>
+        <div class="tech-desc">Реляционная база данных</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">Prisma 7</div>
+        <div class="tech-desc">ORM для работы с БД, миграции</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">NextAuth.js</div>
+        <div class="tech-desc">Авторизация: JWT, Credentials</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">bcryptjs</div>
+        <div class="tech-desc">Хеширование паролей</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">Tailwind CSS</div>
+        <div class="tech-desc">Утилитарный CSS-фреймворк</div>
+      </div>
+      <div class="tech-card">
+        <div class="tech-name">Node.js 22</div>
+        <div class="tech-desc">Среда выполнения JavaScript</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Структура -->
+  <div class="section" id="structure">
+    <h2 class="section-title"><span class="num">3</span> Структура проекта</h2>
+    <div class="code-block"><pre>
+<span class="path">nextjs/</span>
+├── <span class="path">app/</span>                              <span class="comment">— страницы и API роуты</span>
+│   ├── <span class="file">page.tsx</span>                      <span class="comment">— главная страница (/)</span>
+│   ├── <span class="file">layout.tsx</span>                    <span class="comment">— общий layout с навигацией</span>
+│   ├── <span class="file">globals.css</span>                   <span class="comment">— глобальные стили</span>
+│   ├── <span class="path">login/</span><span class="file">page.tsx</span>              <span class="comment">— страница входа (/login)</span>
+│   ├── <span class="path">register/</span><span class="file">page.tsx</span>           <span class="comment">— страница регистрации (/register)</span>
+│   ├── <span class="path">dashboard/</span><span class="file">page.tsx</span>          <span class="comment">— список записей (/dashboard)</span>
+│   ├── <span class="path">diary/</span>
+│   │   ├── <span class="path">new/</span><span class="file">page.tsx</span>            <span class="comment">— новая запись (/diary/new)</span>
+│   │   └── <span class="path">[id]/</span>
+│   │       ├── <span class="file">page.tsx</span>            <span class="comment">— просмотр (/diary/[id])</span>
+│   │       └── <span class="path">edit/</span><span class="file">page.tsx</span>       <span class="comment">— редактирование (/diary/[id]/edit)</span>
+│   └── <span class="path">api/</span>
+│       ├── <span class="path">auth/[...nextauth]/</span><span class="file">route.ts</span>  <span class="comment">— NextAuth handler</span>
+│       ├── <span class="path">register/</span><span class="file">route.ts</span>       <span class="comment">— API регистрации</span>
+│       └── <span class="path">entries/</span>
+│           ├── <span class="file">route.ts</span>            <span class="comment">— POST /api/entries</span>
+│           └── <span class="path">[id]/</span><span class="file">route.ts</span>       <span class="comment">— GET / PUT / DELETE</span>
+├── <span class="path">lib/</span>
+│   └── <span class="file">prisma.ts</span>                     <span class="comment">— singleton клиент Prisma</span>
+├── <span class="path">prisma/</span>
+│   ├── <span class="file">schema.prisma</span>                 <span class="comment">— схема базы данных</span>
+│   └── <span class="path">migrations/</span>                   <span class="comment">— история миграций</span>
+├── <span class="file">auth.ts</span>                           <span class="comment">— конфигурация NextAuth</span>
+├── <span class="file">proxy.ts</span>                          <span class="comment">— middleware защиты страниц</span>
+├── <span class="file">prisma.config.ts</span>                  <span class="comment">— конфигурация Prisma</span>
+└── <span class="file">.env</span>                              <span class="comment">— переменные окружения (не в git!)</span>
+    </pre></div>
+  </div>
+
+  <!-- 4. База данных -->
+  <div class="section" id="database">
+    <h2 class="section-title"><span class="num">4</span> База данных</h2>
+
+    <h3>Таблица User</h3>
+    <table>
+      <thead><tr><th>Поле</th><th>Тип</th><th>Ограничения</th><th>Описание</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>String</td><td>UUID, PK</td><td>Уникальный идентификатор</td></tr>
+        <tr><td><code>email</code></td><td>String</td><td>UNIQUE</td><td>Email пользователя</td></tr>
+        <tr><td><code>password</code></td><td>String</td><td>—</td><td>Хешированный пароль (bcrypt)</td></tr>
+        <tr><td><code>name</code></td><td>String?</td><td>VarChar(100)</td><td>Имя пользователя (опционально)</td></tr>
+        <tr><td><code>createdAt</code></td><td>DateTime</td><td>default(now())</td><td>Дата регистрации</td></tr>
+        <tr><td><code>updatedAt</code></td><td>DateTime</td><td>@updatedAt</td><td>Дата последнего обновления</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Таблица Entry</h3>
+    <table>
+      <thead><tr><th>Поле</th><th>Тип</th><th>Ограничения</th><th>Описание</th></tr></thead>
+      <tbody>
+        <tr><td><code>id</code></td><td>String</td><td>UUID, PK</td><td>Уникальный идентификатор</td></tr>
+        <tr><td><code>title</code></td><td>String</td><td>VarChar(200)</td><td>Заголовок записи</td></tr>
+        <tr><td><code>content</code></td><td>String</td><td>@db.Text</td><td>Текст записи</td></tr>
+        <tr><td><code>mood</code></td><td>String?</td><td>VarChar(50)</td><td>Настроение (опционально)</td></tr>
+        <tr><td><code>userId</code></td><td>String</td><td>Foreign Key</td><td>Ссылка на владельца (User)</td></tr>
+        <tr><td><code>createdAt</code></td><td>DateTime</td><td>default(now())</td><td>Дата создания</td></tr>
+        <tr><td><code>updatedAt</code></td><td>DateTime</td><td>@updatedAt</td><td>Дата изменения</td></tr>
+      </tbody>
+    </table>
+
+    <p>Связь: один пользователь → много записей (one-to-many). При удалении пользователя все его записи удаляются автоматически (<code>onDelete: Cascade</code>).</p>
+  </div>
+
+  <!-- 5. API -->
+  <div class="section" id="api">
+    <h2 class="section-title"><span class="num">5</span> API роуты</h2>
+    <table>
+      <thead><tr><th>Метод</th><th>Путь</th><th>Описание</th><th>Авторизация</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="method method-post">POST</span></td>
+          <td><code>/api/register</code></td>
+          <td>Регистрация нового пользователя</td>
+          <td class="auth-no">Нет</td>
+        </tr>
+        <tr>
+          <td><span class="method method-get">GET</span></td>
+          <td><code>/api/auth/[...nextauth]</code></td>
+          <td>NextAuth — сессия, callback</td>
+          <td class="auth-no">Нет</td>
+        </tr>
+        <tr>
+          <td><span class="method method-post">POST</span></td>
+          <td><code>/api/auth/[...nextauth]</code></td>
+          <td>Вход / выход из системы</td>
+          <td class="auth-no">Нет</td>
+        </tr>
+        <tr>
+          <td><span class="method method-post">POST</span></td>
+          <td><code>/api/entries</code></td>
+          <td>Создание новой записи дневника</td>
+          <td class="auth-yes">Да</td>
+        </tr>
+        <tr>
+          <td><span class="method method-get">GET</span></td>
+          <td><code>/api/entries/[id]</code></td>
+          <td>Получение записи по ID</td>
+          <td class="auth-yes">Да</td>
+        </tr>
+        <tr>
+          <td><span class="method method-put">PUT</span></td>
+          <td><code>/api/entries/[id]</code></td>
+          <td>Обновление записи</td>
+          <td class="auth-yes">Да</td>
+        </tr>
+        <tr>
+          <td><span class="method method-delete">DELETE</span></td>
+          <td><code>/api/entries/[id]</code></td>
+          <td>Удаление записи</td>
+          <td class="auth-yes">Да</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 6. Авторизация -->
+  <div class="section" id="auth">
+    <h2 class="section-title"><span class="num">6</span> Система авторизации</h2>
+
+    <h3>Поток авторизации</h3>
+    <div class="flow-steps">
+      <div class="flow-step"><span class="step-num">1</span><span class="step-text">Пользователь вводит email и пароль на странице <code>/login</code></span></div>
+      <div class="flow-step"><span class="step-num">2</span><span class="step-text">NextAuth вызывает функцию <code>authorize()</code> в <code>auth.ts</code></span></div>
+      <div class="flow-step"><span class="step-num">3</span><span class="step-text">Prisma ищет пользователя в базе данных по email</span></div>
+      <div class="flow-step"><span class="step-num">4</span><span class="step-text"><code>bcrypt.compare()</code> сравнивает введённый пароль с хешем в базе</span></div>
+      <div class="flow-step"><span class="step-num">5</span><span class="step-text">При успехе — создаётся JWT токен и сохраняется в cookie браузера</span></div>
+      <div class="flow-step"><span class="step-num">6</span><span class="step-text">Токен автоматически прикладывается к каждому запросу</span></div>
+    </div>
+
+    <h3>Защита страниц (proxy.ts)</h3>
+    <p>Файл <code>proxy.ts</code> перехватывает каждый запрос до того как он дойдёт до страницы:</p>
+    <ul>
+      <li>Незалогиненные → попытка зайти на <code>/dashboard</code>, <code>/profile</code>, <code>/diary/*</code> → редирект на <code>/login</code></li>
+      <li>Залогиненные → попытка зайти на <code>/login</code> или <code>/register</code> → редирект на <code>/dashboard</code></li>
+    </ul>
+
+    <h3>Безопасность</h3>
+    <ul>
+      <li>Пароли хранятся в виде bcrypt-хеша с cost factor <strong>12</strong></li>
+      <li>JWT токен подписан секретным ключом <code>AUTH_SECRET</code> из <code>.env</code></li>
+      <li>Каждый API роут проверяет сессию перед выполнением операций</li>
+      <li>Записи привязаны к <code>userId</code> — пользователь не может читать чужие записи</li>
+      <li>Секретные переменные окружения не попадают в клиентский код</li>
+    </ul>
+  </div>
+
+  <!-- 7. Страницы -->
+  <div class="section" id="pages">
+    <h2 class="section-title"><span class="num">7</span> Страницы приложения</h2>
+    <table>
+      <thead><tr><th>Маршрут</th><th>Тип</th><th>Описание</th></tr></thead>
+      <tbody>
+        <tr><td><code>/</code></td><td><span class="badge badge-server">Server</span></td><td>Лендинг с кнопками входа и регистрации</td></tr>
+        <tr><td><code>/login</code></td><td><span class="badge badge-client">Client</span></td><td>Форма входа с валидацией ошибок</td></tr>
+        <tr><td><code>/register</code></td><td><span class="badge badge-client">Client</span></td><td>Форма регистрации с валидацией</td></tr>
+        <tr><td><code>/dashboard</code></td><td><span class="badge badge-server">Server</span></td><td>Список всех записей пользователя</td></tr>
+        <tr><td><code>/diary/new</code></td><td><span class="badge badge-client">Client</span></td><td>Форма создания новой записи с выбором настроения</td></tr>
+        <tr><td><code>/diary/[id]</code></td><td><span class="badge badge-server">Server</span></td><td>Просмотр отдельной записи дневника</td></tr>
+        <tr><td><code>/diary/[id]/edit</code></td><td><span class="badge badge-client">Client</span></td><td>Редактирование и удаление записи</td></tr>
+        <tr><td><code>/profile</code></td><td>—</td><td>Страница профиля (в разработке)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 8. Запуск -->
+  <div class="section" id="setup">
+    <h2 class="section-title"><span class="num">8</span> Запуск проекта</h2>
+    <h3>Требования</h3>
+    <ul>
+      <li>Node.js 18+</li>
+      <li>PostgreSQL 16</li>
+      <li>npm</li>
+    </ul>
+    <h3>Установка</h3>
+    <div class="code-block"><pre>
+<span class="comment"># Перейти в папку проекта</span>
+cd ~/nextjs
+
+<span class="comment"># Установить зависимости</span>
+npm install
+
+<span class="comment"># Настроить .env (DATABASE_URL и AUTH_SECRET)</span>
+
+<span class="comment"># Применить миграции к базе данных</span>
+npx prisma migrate dev
+
+<span class="comment"># Запустить сервер разработки</span>
+npm run dev
+    </pre></div>
+    <p>Приложение будет доступно по адресу: <strong>http://localhost:3000</strong></p>
+    <p>Визуальный интерфейс базы данных: <strong>http://localhost:5555</strong> (после <code>npx prisma studio</code>)</p>
+  </div>
+
+  <!-- 9. ENV -->
+  <div class="section" id="env">
+    <h2 class="section-title"><span class="num">9</span> Переменные окружения</h2>
+    <table class="env-table">
+      <thead><tr><th>Переменная</th><th>Пример значения</th><th>Описание</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>DATABASE_URL</code></td>
+          <td><code>postgresql://user:pass@localhost:5432/diary_db</code></td>
+          <td>Строка подключения к PostgreSQL</td>
+        </tr>
+        <tr>
+          <td><code>AUTH_SECRET</code></td>
+          <td><code>openssl rand -base64 32</code></td>
+          <td>Секретный ключ для подписи JWT токенов (минимум 32 символа)</td>
+        </tr>
+      </tbody>
+    </table>
+    <p>⚠️ Файл <code>.env</code> должен быть добавлен в <code>.gitignore</code> — никогда не публикуйте его в репозитории.</p>
+  </div>
+
+  <!-- 10. Roadmap -->
+  <div class="section" id="roadmap">
+    <h2 class="section-title"><span class="num">10</span> Планы развития</h2>
+
+    <p style="color:#6b7280; margin-bottom:16px;">Реализовано:</p>
+    <div class="roadmap-item"><span class="dot-done"></span><span>Регистрация и авторизация (email + пароль)</span></div>
+    <div class="roadmap-item"><span class="dot-done"></span><span>Защита страниц через middleware</span></div>
+    <div class="roadmap-item"><span class="dot-done"></span><span>CRUD операции для записей дневника</span></div>
+    <div class="roadmap-item"><span class="dot-done"></span><span>Отслеживание настроения</span></div>
+    <div class="roadmap-item"><span class="dot-done"></span><span>База данных PostgreSQL с Prisma</span></div>
+
+    <p style="color:#6b7280; margin: 20px 0 16px;">В планах:</p>
+    <div class="roadmap-item"><span class="dot-todo"></span><span>Страница профиля — смена имени и пароля</span></div>
+    <div class="roadmap-item"><span class="dot-todo"></span><span>OAuth авторизация через Google и GitHub</span></div>
+    <div class="roadmap-item"><span class="dot-todo"></span><span>Поиск по записям</span></div>
+    <div class="roadmap-item"><span class="dot-todo"></span><span>Фильтрация по настроению и дате</span></div>
+    <div class="roadmap-item"><span class="dot-todo"></span><span>Статистика настроений с графиками</span></div>
+    <div class="roadmap-item"><span class="dot-todo"></span><span>Деплой на Vercel</span></div>
+  </div>
+
+  <div class="footer">
+    Документация сгенерирована: Февраль 2026 &nbsp;•&nbsp; Проект: Дневник v1.0
+  </div>
+
+</div>
+</body>
+</html>
